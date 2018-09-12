@@ -125,10 +125,10 @@ server.httpserver = http.createServer(function(req,res){
 // Defining a request router
 server.router = {
   '': handlers.index,
-  'account/create': handlers.accountCreate,
+  'user/signup': handlers.userSignUp,
   'favicon.ico': handlers.pizzaFavicon,
   'public': handlers.publicAssets,
-  'users': handlers.users,
+  'api/users': handlers.users,
   'tokens': handlers.tokens,
   'login': handlers.login,
   'logout': handlers.logout,
