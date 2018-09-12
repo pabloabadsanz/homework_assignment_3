@@ -59,57 +59,62 @@ server.httpserver = http.createServer(function(req,res){
       'payload': helpers.parseJSONtoObject(buffer)
     };
 
-    // Route request to handler specified in the router
-    chosenhandler(data, function(statuscode, payload, contentType) {
+    // Route the request to the handler specified in the router
+    chosenhandler(data, function(statusCode, payload, contentType) {
 
       // Determine the type of response (fallback to JSON)
       contentType = typeof(contentType) == 'string' ? contentType : 'json';
 
-      // Use the status code called back by handler, or default to 200
-      statuscode = typeof(statuscode) == 'number' ? statuscode : 200;
+      // Use the status code returned from the handler, or set the default status code to 200
+      statusCode = typeof(statusCode) == 'number' ? statusCode : 200;
 
-      // Return the response parts that are content-specific
+      // Return the response parts that are content-type specific
       var payloadString = '';
-      if (contentType == 'json') {
+      if(contentType == 'json'){
         res.setHeader('Content-Type', 'application/json');
-        // Use the payload called back by the handler, or default to empty object
         payload = typeof(payload) == 'object' ? payload : {};
-        payloadstring = JSON.stringify(payload);
+        payloadString = JSON.stringify(payload);
       }
-      if (contentType == 'html') {
+
+      if(contentType == 'html'){
         res.setHeader('Content-Type', 'text/html');
         payloadString = typeof(payload) == 'string' ? payload : '';
       }
-      if (contentType == 'favicon') {
+
+      if(contentType == 'favicon'){
         res.setHeader('Content-Type', 'image/x-icon');
         payloadString = typeof(payload) !== 'undefined' ? payload : '';
       }
-      if (contentType == 'css') {
+
+      if(contentType == 'plain'){
+        res.setHeader('Content-Type', 'text/plain');
+        payloadString = typeof(payload) !== 'undefined' ? payload : '';
+      }
+
+      if(contentType == 'css'){
         res.setHeader('Content-Type', 'text/css');
         payloadString = typeof(payload) !== 'undefined' ? payload : '';
       }
-      if (contentType == 'png') {
+
+      if(contentType == 'png'){
         res.setHeader('Content-Type', 'image/png');
         payloadString = typeof(payload) !== 'undefined' ? payload : '';
       }
-      if (contentType == 'jpg') {
+
+      if(contentType == 'jpg'){
         res.setHeader('Content-Type', 'image/jpeg');
         payloadString = typeof(payload) !== 'undefined' ? payload : '';
       }
-      if (contentType == 'plain') {
-        res.setHeader('Content-Type', 'text/plain');
-        payloadString = typeof(payload) == 'string' ? payload : '';
-      }
 
-      // Return the response parts that are common to all content-types
-      res.writeHead(statuscode);
+      // Return the response-parts common to all content-types
+      res.writeHead(statusCode);
       res.end(payloadString);
 
       // If the response is 200, print green otherwise print red
-      if (statuscode == 200) {
-        console.log('\x1b[32m%s\x1b[0m', method.toUpperCase() + ' /' + trimmedpath + ' ' + statuscode);
+      if (statusCode == 200) {
+        console.log('\x1b[32m%s\x1b[0m', method.toUpperCase() + ' /' + trimmedpath + ' ' + statusCode);
       } else {
-        console.log('\x1b[31m%s\x1b[0m', method.toUpperCase() + ' /' + trimmedpath + ' ' + statuscode);
+        console.log('\x1b[31m%s\x1b[0m', method.toUpperCase() + ' /' + trimmedpath + ' ' + statusCode);
       }
 
     });
