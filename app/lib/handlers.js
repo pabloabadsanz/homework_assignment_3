@@ -24,9 +24,8 @@ handlers.index = function(data, callback) {
 
     // Prepare data for interpolation
     var templateData = {
-      'head.title': 'This is the title',
-      'head.description': 'This is the meta description',
-      'body.title': 'Hello templated world!',
+      'head.title': 'Welcome to Pablo\'s Pizza!',
+      'head.description': 'Sign up today and start ordering pizza from anywhere.',
       'body.class': 'index'
     };
 
