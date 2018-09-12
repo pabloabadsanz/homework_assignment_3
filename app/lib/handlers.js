@@ -58,7 +58,7 @@ handlers.pizzaFavicon = function(data, callback) {
   if (data.method == 'get') {
 
     // Read in the favicon's data
-    helpers.getStaticAssetContents('pizzafavicon.ico', function(err, data) {
+    helpers.getStaticAssetContents('favicon.ico', function(err, data) {
       if (!err && data) {
 
         // Callback the data
