@@ -47,6 +47,9 @@ server.httpserver = http.createServer(function(req,res){
     // Choose the handler. If not found, use the notFound handler
     var chosenhandler = typeof(server.router[trimmedpath]) !== 'undefined' ? server.router[trimmedpath] : handlers.notFound;
 
+    // If the request is within the public directory, use the public handler instead
+    chosenhandler = trimmedpath.indexOf('public/') > -1 ? handlers.publicAssets : chosenhandler;
+
     // Construct data object to be sent to the handler
     var data = {
       'trimmedPath' : trimmedpath,
@@ -57,20 +60,50 @@ server.httpserver = http.createServer(function(req,res){
     };
 
     // Route request to handler specified in the router
-    chosenhandler(data,function(statuscode,payload){
+    chosenhandler(data, function(statuscode, payload, contentType) {
+
+      // Determine the type of response (fallback to JSON)
+      contentType = typeof(contentType) == 'string' ? contentType : 'json';
+
       // Use the status code called back by handler, or default to 200
       statuscode = typeof(statuscode) == 'number' ? statuscode : 200;
 
-      // Use the payload called back by the handler, or default to empty object
-      payload = typeof(payload) == 'object' ? payload : {};
+      // Return the response parts that are content-specific
+      var payloadString = '';
+      if (contentType == 'json') {
+        res.setHeader('Content-Type', 'application/json');
+        // Use the payload called back by the handler, or default to empty object
+        payload = typeof(payload) == 'object' ? payload : {};
+        payloadstring = JSON.stringify(payload);
+      }
+      if (contentType == 'html') {
+        res.setHeader('Content-Type', 'text/html');
+        payloadString = typeof(payload) == 'string' ? payload : '';
+      }
+      if (contentType == 'favicon') {
+        res.setHeader('Content-Type', 'image/x-icon');
+        payloadString = typeof(payload) !== 'undefined' ? payload : '';
+      }
+      if (contentType == 'css') {
+        res.setHeader('Content-Type', 'text/css');
+        payloadString = typeof(payload) !== 'undefined' ? payload : '';
+      }
+      if (contentType == 'png') {
+        res.setHeader('Content-Type', 'image/png');
+        payloadString = typeof(payload) !== 'undefined' ? payload : '';
+      }
+      if (contentType == 'jpg') {
+        res.setHeader('Content-Type', 'image/jpeg');
+        payloadString = typeof(payload) !== 'undefined' ? payload : '';
+      }
+      if (contentType == 'plain') {
+        res.setHeader('Content-Type', 'text/plain');
+        payloadString = typeof(payload) == 'string' ? payload : '';
+      }
 
-      // Convert the payload to string
-      var payloadstring = JSON.stringify(payload);
-
-      // Return the response
-      res.setHeader('Content-Type', 'application/json');
+      // Return the response parts that are common to all content-types
       res.writeHead(statuscode);
-      res.end(payloadstring);
+      res.end(payloadString);
 
       // If the response is 200, print green otherwise print red
       if (statuscode == 200) {
@@ -86,6 +119,10 @@ server.httpserver = http.createServer(function(req,res){
 
 // Defining a request router
 server.router = {
+  '': handlers.index,
+  'account/create': handlers.accountCreate,
+  'favicon.ico': handlers.pizzaFavicon,
+  'public': handlers.publicAssets,
   'users': handlers.users,
   'tokens': handlers.tokens,
   'login': handlers.login,

@@ -25,6 +25,12 @@ environments.production = {
     'key': '',
     'path': '',
     'sender': ''
+  },
+  'templateGlobals': {
+    'appName': 'Order your pizza',
+    'companyName': 'Pablo\'s Pizza',
+    'yearCreated': '2018',
+    'baseUrl': 'http://localhost:1234/'
   }
 }
 

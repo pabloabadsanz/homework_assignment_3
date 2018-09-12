@@ -11,6 +11,113 @@ var config = require('../config');
 // Define the handlers object
 var handlers = {};
 
+/*
+ * HTML handlers
+ *
+ */
+
+ // Index handler
+handlers.index = function(data, callback) {
+
+  // Reject any request that isn't a GET
+  if (data.method == 'get') {
+
+    // Prepare data for interpolation
+    var templateData = {
+      'head.title': 'This is the title',
+      'head.description': 'This is the meta description',
+      'body.title': 'Hello templated world!',
+      'body.class': 'index'
+    };
+
+    // Read in the index teamplate as a string
+    helpers.getTemplate('index', templateData, function(err, str) {
+      if (!err && str) {
+
+        // Add universal header and footer
+       helpers.addHeaderAndFooterTemplates(str, templateData, function(err, str) {
+         if (!err && str) {
+           // Return that page as HTML
+           callback(200, str, 'html');
+         } else {
+           callback(500, undefined, 'html');
+         }
+       });
+      } else {
+        callback(500, undefined, 'html');
+      }
+    });
+  } else {
+    callback(405, undefined, 'html');
+  }
+};
+
+// Pizza site Favicon
+handlers.pizzaFavicon = function(data, callback) {
+
+  // Reject any request that isn't a GET
+  if (data.method == 'get') {
+
+    // Read in the favicon's data
+    helpers.getStaticAssetContents('pizzafavicon.ico', function(err, data) {
+      if (!err && data) {
+
+        // Callback the data
+        callback(200, data, 'favicon');
+      } else {
+        callback(500);
+      }
+    });
+  } else {
+    callback(405);
+  }
+};
+
+ // Public assets' handler
+handlers.publicAssets = function(data, callback) {
+
+  // Reject any request that isn't a GET
+  if (data.method == 'get') {
+
+    // Get the filename which is requested
+    var assetName = data.trimmedPath.replace('public/', '').trim();
+    if (assetName.length > 0) {
+      // Read the asset's data
+      helpers.getStaticAssetContents(assetName, function(err, data) {
+        if (!err && data) {
+          // Determine the content type, default to plain text
+          var contentType = 'plain';
+           if (assetName.indexOf('.css') > -1) {
+            contentType = 'css';
+          }
+          if (assetName.indexOf('.png') > -1) {
+            contentType = 'png';
+          }
+          if (assetName.indexOf('.jpg') > -1) {
+            contentType = 'jpg';
+          }
+          if (assetName.indexOf('.ico') > -1) {
+            contentType = 'favicon';
+          }
+           // Callback the data
+          callback(200, data, contentType);
+        } else {
+          callback(404);
+        }
+      });
+    } else {
+      callback(404);
+    }
+  } else {
+    callback(405);
+  }
+};
+
+ /*
+ * JSON Users REST API handlers
+ *
+ */
+
 // Users handler
 handlers.users = function(data, callback) {
   var acceptablemethods = ['post', 'get', 'put', 'delete'];
