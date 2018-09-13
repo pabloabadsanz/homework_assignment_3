@@ -51,6 +51,39 @@ handlers.index = function(data, callback) {
   }
 };
 
+// User logged out
+handlers.userlogout = function(data, callback) {
+  // Reject any request that isn't a GET
+  if (data.method == 'get') {
+
+   // Prepare data for interpolation
+   var templateData = {
+     'head.title': 'Logged out',
+     'head.description': 'You have been logged out of your account',
+     'body.class': 'loggedout'
+   };
+
+   // Read in the index teamplate as a string
+   helpers.getTemplate('loggedout', templateData, function(err, str) {
+     if (!err && str) {
+       // Add the universal header and footer
+       helpers.addHeaderAndFooterTemplates(str, templateData, function(err, str) {
+         if (!err && str) {
+           // Return that page as HTML
+           callback(200, str, 'html');
+         } else {
+           callback(500, undefined, 'html');
+         }
+       });
+     } else {
+       callback(500, undefined, 'html');
+     }
+   });
+  } else {
+   callback(405, undefined, 'html');
+  }
+};
+
 // Pizza site Favicon
 handlers.pizzaFavicon = function(data, callback) {
 

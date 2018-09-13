@@ -131,7 +131,7 @@ server.router = {
   'api/users': handlers.users,
   'api/tokens': handlers.tokens,
   'login': handlers.userlogin,
-  'logout': handlers.logout,
+  'logout': handlers.userlogout,
   'menu': handlers.menu,
   'cart': handlers.cart,
   'cart/item': handlers.cartitems,
