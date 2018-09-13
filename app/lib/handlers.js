@@ -499,7 +499,6 @@ handlers._users.delete = function(data, callback) {
 
 // Tokens
 handlers.tokens = function(data, callback) {
-  console.log(data);
   var acceptablemethods = ['post', 'get', 'put', 'delete'];
   if (acceptablemethods.indexOf(data.method) > -1) {
     handlers._tokens[data.method](data, callback);
@@ -515,7 +514,7 @@ handlers._tokens = {};
 // Required data: username, password
 // Optional data: none
 handlers._tokens.post = function(data, callback) {
-  console.log(data);
+
   var username = typeof(data.payload.username) == 'string' && data.payload.username.trim().length > 0 ? data.payload.username.trim() : false;
   var password = typeof(data.payload.password) == 'string' && data.payload.password.trim().length > 0 ? data.payload.password.trim() : false;
 
