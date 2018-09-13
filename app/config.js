@@ -19,7 +19,7 @@ environments.production = {
   },
   'stripe' : {
     'key' : '',
-    'currency' : 'eur'
+    'currency' : ''
   },
   'mailgun': {
     'key': '',

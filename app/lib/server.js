@@ -128,6 +128,7 @@ server.router = {
   'user/signup': handlers.userSignUp,
   'user/edit': handlers.userEdit,
   'user/deleted': handlers.userDeleted,
+  'order/start': handlers.orderPizza,
   'favicon.ico': handlers.pizzaFavicon,
   'public': handlers.publicAssets,
   'api/users': handlers.users,
@@ -137,7 +138,8 @@ server.router = {
   'menu': handlers.menu,
   'cart': handlers.cart,
   'cart/item': handlers.cartitems,
-  'cart/checkout': handlers.checkout
+  'cart/checkout': handlers.checkout,
+  'order/placed': handlers.orderPlaced
 }
 
 // Init script

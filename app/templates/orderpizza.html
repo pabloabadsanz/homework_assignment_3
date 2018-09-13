@@ -1,0 +1,24 @@
+<h1>Order a pizza!</h1>
+<h2>Start by adding your favorite ingredients</h2>
+<hr />
+
+
+<div class="formWrapper">
+  <form id="orderCreate" action="/cart/checkout" method="POST">
+    <div class="formError"></div>
+    <div class="inputWrapper">
+      <div class="inputLabel">Available ingredients</div>
+      <div class="checkboxGroup">
+        <input type="checkbox" class="multiselect" name="items" value="Tomato">Tomato (4.5€)
+        <input type="checkbox" class="multiselect" name="items" value="Tuna">Tuna (3.75€)
+        <input type="checkbox" class="multiselect" name="items" value="Ham">Ham (3.9€)
+        <input type="checkbox" class="multiselect" name="items" value="Pepperoni">Pepperoni (4.8€)
+        <input type="checkbox" class="multiselect" name="items" value="Cheese">Cheese (4€)
+      </div>
+    </div>
+
+    <div class="inputWrapper ctaWrapper">
+      <button type="submit" class="cta green">Order Pizza!</button>
+    </div>
+  </form>
+</div>

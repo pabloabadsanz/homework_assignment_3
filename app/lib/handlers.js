@@ -150,6 +150,70 @@ handlers.userlogout = function(data, callback) {
   }
 };
 
+// Form for ordering a pizza
+handlers.orderPizza = function(data, callback) {
+  // Reject any request that isn't a GET
+  if (data.method == 'get') {
+
+    // Prepare data for interpolation
+    var templateData = {
+      'head.title': 'Order your pizza now!',
+      'body.class': 'orderPizza'
+    };
+
+    // Read in the index teamplate as a string
+    helpers.getTemplate('orderpizza', templateData, function(err, str) {
+      if (!err && str) {
+        // Add the universal header and footer
+        helpers.addHeaderAndFooterTemplates(str, templateData, function(err, str) {
+          if (!err && str) {
+            // Return that page as HTML
+            callback(200, str, 'html');
+          } else {
+            callback(500, undefined, 'html');
+          }
+        });
+      } else {
+        callback(500, undefined, 'html');
+      }
+    });
+  } else {
+    callback(405, undefined, 'html');
+  }
+};
+
+// Form for ordering a pizza
+handlers.orderPlaced = function(data, callback) {
+  // Reject any request that isn't a GET
+  if (data.method == 'get') {
+
+    // Prepare data for interpolation
+    var templateData = {
+      'head.title': 'Bravo!',
+      'body.class': 'orderPlaced'
+    };
+
+    // Read in the index teamplate as a string
+    helpers.getTemplate('orderplaced', templateData, function(err, str) {
+      if (!err && str) {
+        // Add the universal header and footer
+        helpers.addHeaderAndFooterTemplates(str, templateData, function(err, str) {
+          if (!err && str) {
+            // Return that page as HTML
+            callback(200, str, 'html');
+          } else {
+            callback(500, undefined, 'html');
+          }
+        });
+      } else {
+        callback(500, undefined, 'html');
+      }
+    });
+  } else {
+    callback(405, undefined, 'html');
+  }
+};
+
 // Pizza site Favicon
 handlers.pizzaFavicon = function(data, callback) {
 
@@ -948,6 +1012,7 @@ handlers._cartitems.delete = function(data, callback) {
 // Required data: username, token, items
 // Optional data: none
 handlers._cartitems.post = function(data, callback) {
+
   // Check that the token is valid
   var token = typeof(data.payload.token) == 'string' && data.payload.token.trim().length == 20 ? data.payload.token.trim() : false;
   var username = typeof(data.payload.username) == 'string' && data.payload.username.trim().length > 0 ? data.payload.username.trim() : false;
