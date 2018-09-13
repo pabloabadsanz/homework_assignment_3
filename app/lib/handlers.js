@@ -384,7 +384,7 @@ handlers._users.put = function(data, callback) {
 
   // Check for the optional fields
   var name = typeof(data.payload.name) == 'string' && data.payload.name.trim().length > 0 ? data.payload.name.trim() : false;
-  var mail = typeof(data.payload.mail) == 'string' && data.payload.mail.trim().length > 0 && data.payload.mail.trim().indexOf('@') > -1 && data.payload.mail.trim().indexOf('.') > -1 && data.payload.mail.trim().indexOf('@') < data.payload.mail.trim().indexOf('.') - 1 ? data.payload.lastName.trim() : false;
+  var mail = typeof(data.payload.mail) == 'string' && data.payload.mail.trim().length > 0 && data.payload.mail.trim().indexOf('@') > -1 && data.payload.mail.trim().indexOf('.') > -1 && data.payload.mail.trim().indexOf('@') < data.payload.mail.trim().indexOf('.') - 1 ? data.payload.mail.trim() : false;
   var address = typeof(data.payload.address) == 'string' && data.payload.address.trim().length > 0 ? data.payload.address.trim() : false;
   var password = typeof(data.payload.password) == 'string' && data.payload.password.trim().length > 0 ? data.payload.password.trim() : false;
 
