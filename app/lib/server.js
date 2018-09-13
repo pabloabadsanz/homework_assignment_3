@@ -127,6 +127,7 @@ server.router = {
   '': handlers.index,
   'user/signup': handlers.userSignUp,
   'user/edit': handlers.userEdit,
+  'user/deleted': handlers.userDeleted,
   'favicon.ico': handlers.pizzaFavicon,
   'public': handlers.publicAssets,
   'api/users': handlers.users,

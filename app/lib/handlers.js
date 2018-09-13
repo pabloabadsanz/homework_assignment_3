@@ -84,6 +84,39 @@ handlers.userEdit = function(data, callback) {
   }
 };
 
+// User has been deleted
+handlers.userDeleted = function(data, callback) {
+  // Reject any request that isn't a GET
+  if (data.method == 'get') {
+
+    // Prepare data for interpolation
+    var templateData = {
+      'head.title': 'User deleted',
+      'head.description': 'Your user account has been deleted',
+      'body.class': 'userDeleted'
+    };
+
+    // Read in the index teamplate as a string
+    helpers.getTemplate('userDeleted', templateData, function(err, str) {
+      if (!err && str) {
+        // Add the universal header and footer
+        helpers.addHeaderAndFooterTemplates(str, templateData, function(err, str) {
+          if (!err && str) {
+            // Return that page as HTML
+            callback(200, str, 'html');
+          } else {
+            callback(500, undefined, 'html');
+          }
+        });
+      } else {
+        callback(500, undefined, 'html');
+      }
+    });
+  } else {
+    callback(405, undefined, 'html');
+  }
+};
+
 // User logged out
 handlers.userlogout = function(data, callback) {
   // Reject any request that isn't a GET
@@ -466,6 +499,7 @@ handlers._users.delete = function(data, callback) {
 
 // Tokens
 handlers.tokens = function(data, callback) {
+  console.log(data);
   var acceptablemethods = ['post', 'get', 'put', 'delete'];
   if (acceptablemethods.indexOf(data.method) > -1) {
     handlers._tokens[data.method](data, callback);
@@ -481,6 +515,7 @@ handlers._tokens = {};
 // Required data: username, password
 // Optional data: none
 handlers._tokens.post = function(data, callback) {
+  console.log(data);
   var username = typeof(data.payload.username) == 'string' && data.payload.username.trim().length > 0 ? data.payload.username.trim() : false;
   var password = typeof(data.payload.password) == 'string' && data.payload.password.trim().length > 0 ? data.payload.password.trim() : false;
 
