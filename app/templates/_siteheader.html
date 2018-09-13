@@ -12,22 +12,39 @@
     <script type="text/javascript" charset="utf-8" src="public/pizzaapp.js"></script>
     <link rel="stylesheet" type="text/css" href="public/pizzasite.css" />
    </head>
-  <body class="{body.class}">
-    <!-- Page wrapper -->
-    <div class="wrapper">
-     <!-- Header -->
-    <div class="header">
-      <!-- Logo -->
-      <a class="logo" href="/"></a>
-      <!-- Navigation -->
-      <ul class="menu">
-        <li><a href="/">Home</a></li>
-        <li><a class="loggedOut" href="user/signup">Signup</a></li>
-        <li><a class="loggedOut" href="login">Login</a></li>
-        <li><a class="loggedIn" href="/">Menu Items</a></li>
-        <li><a class="loggedIn" href="/">Account Settings</a></li>
-        <li><a class="loggedIn" id="logoutButton" href="#">Logout</a></li>
-      </ul>
-    </div>
-     <!-- Page-specific content -->
-    <div class="content">
+   <body class="{body.class}">
+     <!-- Page Wrapper -->
+     <div class="wrapper">
+       <!-- Header -->
+       <div class="header">
+         <!-- Logo -->
+         <a class="logo" href="/">
+           <img src="public/logo.png" alt="Logo" />
+         </a>
+         <!-- Navigation -->
+         <ul class="menu">
+           <li>
+             <a href="/">Home</a>
+           </li>
+           <li class="loggedOut">
+             <a href="/user/signup">Signup</a>
+           </li>
+           <li class="loggedOut">
+             <a href="/login">Login</a>
+           </li>
+           <li class="loggedIn">
+             <a href="/checks/all">Dashboard</a>
+           </li>
+           <li class="loggedIn">
+             <a href="/user/edit">Account Settings</a>
+           </li>
+           <li class="loggedIn">
+             <a href="#" id="logoutButton">Logout</a>
+           </li>
+         </ul>
+
+         <div class="clear"></div>
+       </div>
+
+       <!-- Page-Specific Content -->
+       <div class="content">
