@@ -72,7 +72,40 @@ handlers.pizzaFavicon = function(data, callback) {
   }
 };
 
- // Public assets' handler
+// Log in handler
+handlers.userlogin = function(data, callback) {
+  // Reject any request that isn't a GET
+  if (data.method == 'get') {
+
+   // Prepare data for interpolation
+   var templateData = {
+     'head.title': 'Login to your account',
+     'head.description': 'Please enter your phone number and password to access your account',
+     'body.class': 'login'
+   };
+
+   // Read in the index teamplate as a string
+   helpers.getTemplate('login', templateData, function(err, str) {
+     if (!err && str) {
+       // Add the universal header and footer
+       helpers.addHeaderAndFooterTemplates(str, templateData, function(err, str) {
+         if (!err && str) {
+           // Return that page as HTML
+           callback(200, str, 'html');
+         } else {
+           callback(500, undefined, 'html');
+         }
+       });
+     } else {
+       callback(500, undefined, 'html');
+     }
+   });
+  } else {
+   callback(405, undefined, 'html');
+  }
+};
+
+// Public assets' handler
 handlers.publicAssets = function(data, callback) {
 
   // Reject any request that isn't a GET
@@ -122,7 +155,7 @@ handlers.userSignUp = function(data, callback) {
       'head.description': 'Signup is easy and only takes a few seconds.',
       'body.class': 'accountCreate'
     };
-     // Read in the index teamplate as a string
+    // Read in the index teamplate as a string
     helpers.getTemplate('signup', templateData, function(err, str) {
       if (!err && str) {
         // Add the universal header and footer
