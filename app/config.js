@@ -18,13 +18,13 @@ environments.production = {
     'Cheese': 4,
   },
   'stripe' : {
-    'key' : 'sk_test_FHLoeqt2mf9JSIBL5ZWnf1ja',
+    'key' : '',
     'currency' : 'eur'
   },
   'mailgun': {
-    'key': 'api:7c505237e6d36910698446ae286b2072-f45b080f-9cd90cfc',
-    'path': '/v3/sandboxc03436a1c5374c71b3a5f60679c88a18.mailgun.org/messages',
-    'sender': 'Pablo\'s Pizza <postmaster@sandboxc03436a1c5374c71b3a5f60679c88a18.mailgun.org>'
+    'key': '',
+    'path': '',
+    'sender': ''
   },
   'templateGlobals': {
     'appName': 'Order your pizza',

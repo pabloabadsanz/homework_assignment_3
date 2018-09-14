@@ -548,7 +548,6 @@ handlers._users.delete = function(data, callback) {
         _data.read('users', username, function(err, data) {
           if (!err && data) {
             _data.delete('users', username, function(err) {
-              console.log(err);
               if (!err) {
                 // Delete each of the tokens associated with the user
                 var usertokens = typeof(data.tokens) == 'object' && data.tokens instanceof Array ? data.tokens : [];
