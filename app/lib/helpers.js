@@ -89,6 +89,7 @@ helpers.paymentWithStripe = function(amount, callback) {
   });
 
   req.on('error', callback);
+
   req.write(stringpayload);
   req.end();
 

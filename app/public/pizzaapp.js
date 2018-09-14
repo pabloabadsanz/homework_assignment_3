@@ -114,7 +114,7 @@ app.logUserOut = function(redirectUser) {
 
     // Send the user to the logged out page
     if (redirectUser) {
-      window.location = '/user/deleted'
+      window.location = '/'
     }
 
   });
@@ -129,6 +129,11 @@ app.loadDataOnPage = function(){
   // Logic for account settings page
   if (primaryClass == 'userEdit') {
     app.loadAccountEditPage();
+  }
+
+  // Load the already saved items of the order if there were any
+  if (primaryClass == 'orderPizza') {
+    app.loadOrderPizzaPage();
   }
 
   // Load the ingredients in the pizza before checking out the order
@@ -172,6 +177,37 @@ app.loadAccountEditPage = function(){
 };
 
 // Load the account edit page specifically
+app.loadOrderPizzaPage = function(){
+
+  // Get the username from the current token, or log the user out if none is there
+  var username = typeof(app.config.sessionToken.username) == 'string' ? app.config.sessionToken.username : false;
+  if (username) {
+
+    // Fetch the user data
+    var queryStringObject = {
+      'username' : username
+    };
+    app.client.request(undefined,'api/users','GET',queryStringObject,undefined,function(statusCode,responsePayload){
+      if(statusCode == 200){
+        var ingredients = responsePayload.cart;
+        var ingredientsCheckboxes = document.querySelectorAll("#orderCreate input");
+        ingredientsCheckboxes.forEach(function(ingredientCheckBox) {
+          var checkboxValue = ingredientCheckBox.value;
+          if (ingredients.indexOf(checkboxValue) > -1) {
+             ingredientCheckBox.checked = true;
+          }
+        });
+      } else {
+        // If the request comes back as something other than 200, log the user our (on the assumption that the api is temporarily down or the users token is bad)
+        app.logUserOut();
+      }
+    });
+  } else {
+    app.logUserOut();
+  }
+};
+
+// Load the account edit page specifically
 app.loadOrderCheckoutPage = function(){
 
   // Get the username from the current token, or log the user out if none is there
@@ -185,7 +221,7 @@ app.loadOrderCheckoutPage = function(){
     app.client.request(undefined,'api/users','GET',queryStringObject,undefined,function(statusCode,responsePayload){
       if(statusCode == 200){
         // Put the data into the forms as values where needed
-        document.querySelector("#orderCreate .ingredientsInput").value = responsePayload.cart;
+        document.querySelector("#orderReview .ingredientsInput").value = responsePayload.cart;
 
       } else {
         // If the request comes back as something other than 200, log the user our (on the assumption that the api is temporarily down or the users token is bad)

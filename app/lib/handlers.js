@@ -548,6 +548,7 @@ handlers._users.delete = function(data, callback) {
         _data.read('users', username, function(err, data) {
           if (!err && data) {
             _data.delete('users', username, function(err) {
+              console.log(err);
               if (!err) {
                 // Delete each of the tokens associated with the user
                 var usertokens = typeof(data.tokens) == 'object' && data.tokens instanceof Array ? data.tokens : [];
@@ -568,7 +569,7 @@ handlers._users.delete = function(data, callback) {
                         if (!deletionErrors) {
                           callback(200);
                         } else {
-                          callback(500, {'Error': 'Errors encountered while attempting to delete all of the user\'s tokens. All checks may not have deleted from the system successfully'});
+                          callback(500, {'Error': 'Errors encountered while attempting to delete all of the user\'s tokens. All orders may not have deleted from the system successfully'});
                         }
                       }
                     });
@@ -1059,6 +1060,16 @@ handlers._cartitems.post = function(data, callback) {
           if (!err && userData) {
             var cartobject = typeof(userData.cart) == 'object' && userData.cart instanceof Array && userData.cart.length > 0 ? userData.cart : [];
 
+            // Check if some of the items already in the cart are not present anymore in the list of ingredients provided in the request
+            if (userData.cart) {
+              userData.cart.forEach(function(item) {
+                if (items.indexOf(item) == -1) {
+                  var itemposition = userData.cart.indexOf(item);
+                  userData.cart.splice(itemposition, 1);
+                }
+              });
+            }
+
             // Loop through the items to add, and add them if they're not in the list
             items.forEach(function(item) {
               var itemposition = cartobject.indexOf(item.trim());
@@ -1085,7 +1096,23 @@ handlers._cartitems.post = function(data, callback) {
       }
     });
   } else {
-    callback(400, {'Error': 'Missing required fields, or invalid'});
+    // Empty any order which was previously created for sanity
+    // Lookup the user
+    _data.read('users', username, function(err, userData) {
+      if (!err && userData) {
+        if (userData.cart) {
+          userData.cart = [];
+          // Store the new updates
+          _data.update('users', username, userData, function(err) {
+            if (!err) {
+              callback(400, {'Error': 'Missing required fields, or invalid'});
+            } else {
+              callback(500, {'Error': 'Could not update user'});
+            }
+          });
+        }
+      }
+    });
   }
 };
 
