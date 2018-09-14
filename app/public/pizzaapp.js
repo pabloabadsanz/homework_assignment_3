@@ -127,8 +127,13 @@ app.loadDataOnPage = function(){
   var primaryClass = typeof(bodyClasses[0]) == 'string' ? bodyClasses[0] : false;
 
   // Logic for account settings page
-  if(primaryClass == 'userEdit'){
+  if (primaryClass == 'userEdit') {
     app.loadAccountEditPage();
+  }
+
+  // Load the ingredients in the pizza before checking out the order
+  if (primaryClass == 'orderReview') {
+    app.loadOrderCheckoutPage();
   }
 };
 
@@ -166,6 +171,32 @@ app.loadAccountEditPage = function(){
   }
 };
 
+// Load the account edit page specifically
+app.loadOrderCheckoutPage = function(){
+
+  // Get the username from the current token, or log the user out if none is there
+  var username = typeof(app.config.sessionToken.username) == 'string' ? app.config.sessionToken.username : false;
+  if (username) {
+
+    // Fetch the user data
+    var queryStringObject = {
+      'username' : username
+    };
+    app.client.request(undefined,'api/users','GET',queryStringObject,undefined,function(statusCode,responsePayload){
+      if(statusCode == 200){
+        // Put the data into the forms as values where needed
+        document.querySelector("#orderCreate .ingredientsInput").value = responsePayload.cart;
+
+      } else {
+        // If the request comes back as something other than 200, log the user our (on the assumption that the api is temporarily down or the users token is bad)
+        app.logUserOut();
+      }
+    });
+  } else {
+    app.logUserOut();
+  }
+};
+
 // Bind the forms
 app.bindForms = function(){
   if(document.querySelector("form")){
@@ -187,7 +218,6 @@ app.bindForms = function(){
         if(document.querySelector("#"+formId+" .formSuccess")){
           document.querySelector("#"+formId+" .formSuccess").style.display = 'none';
         }
-
 
         // Turn the inputs into a payload
         var payload = {};
@@ -312,8 +342,13 @@ app.formResponseProcessor = function(formId,requestPayload,responsePayload){
      window.location = '/user/deleted';
    }
 
-   // If the user just ordered a new pizza successfully, redirect back to the main page
+   // If the user clicked the Next button after selecting the ingredients, take him to the review ingredients page
    if(formId == 'orderCreate'){
+     window.location = '/order/review';
+   }
+
+   // If the user just ordered a new pizza successfully, redirect to the success message page
+   if(formId == 'orderReview'){
      window.location = '/order/placed';
    }
 };

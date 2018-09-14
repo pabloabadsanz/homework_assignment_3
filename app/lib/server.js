@@ -139,6 +139,7 @@ server.router = {
   'cart': handlers.cart,
   'cart/item': handlers.cartitems,
   'cart/checkout': handlers.checkout,
+  'order/review': handlers.orderReview,
   'order/placed': handlers.orderPlaced
 }
 
